@@ -1,11 +1,12 @@
 import { ArrowUpRight } from "lucide-react";
+import { Reveal } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 import { site } from "@/lib/site";
 
 export function Source() {
   return (
     <Section id="source" label="Source" title="Read the code.">
-      <div className="max-w-2xl">
+      <Reveal className="max-w-2xl">
         <p className="text-fg-secondary">
           The repository is public so you can see how it is built, commit by commit. It is a
           portfolio project, not a starter template. The assistant configuration and deployment
@@ -21,7 +22,7 @@ export function Source() {
           View on GitHub
           <ArrowUpRight size={14} aria-hidden />
         </a>
-      </div>
+      </Reveal>
     </Section>
   );
 }
