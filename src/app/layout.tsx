@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Mono, Inter } from "next/font/google";
 import { Footer } from "@/components/footer";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { Nav } from "@/components/nav";
 import { VoiceProvider } from "@/components/widget/voice-provider";
 import { VoiceWidget } from "@/components/widget/voice-widget";
@@ -42,14 +43,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <VoiceProvider>
-          <Nav />
-          <main id="main" className="flex flex-1 flex-col pt-16">
-            {children}
-          </main>
-          <Footer />
-          <VoiceWidget />
-        </VoiceProvider>
+        <MotionProvider>
+          <VoiceProvider>
+            <Nav />
+            <main id="main" className="flex flex-1 flex-col pt-16">
+              {children}
+            </main>
+            <Footer />
+            <VoiceWidget />
+          </VoiceProvider>
+        </MotionProvider>
       </body>
     </html>
   );
