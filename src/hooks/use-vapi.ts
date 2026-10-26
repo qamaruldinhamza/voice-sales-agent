@@ -16,6 +16,13 @@ const MIC_BLOCKED =
 const START_FAILED =
   "Could not start the call. Check that microphone access is allowed and try again.";
 
+// Daily reports "Meeting has ended" as an error when the assistant ends the call, the max
+// duration is reached or the server hangs up. That is a normal end, not a failure.
+function isCallEnded(err: unknown) {
+  const type = (err as { error?: { error?: { type?: string } } } | null)?.error?.error?.type;
+  return type === "ejected";
+}
+
 export function useVapi({
   publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY,
   assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID,
@@ -92,6 +99,10 @@ export function useVapi({
       vapi.on("speech-start", () => setIsSpeaking(true));
       vapi.on("speech-end", () => setIsSpeaking(false));
       vapi.on("error", (err) => {
+        if (isCallEnded(err)) {
+          reset();
+          return;
+        }
         // After the call is live, some errors are non-critical (audio
         // processing, recording). call-end fires if the call really drops.
         const micBlocked = String(err?.type).startsWith("microphone-preflight");
