@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 
 const stack = [
@@ -21,24 +22,27 @@ export function Stack() {
     <Section id="stack" label="Stack and decisions" title="Plain tools, chosen on purpose.">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         <dl className="flex flex-col">
-          {stack.map((item) => (
-            <div
+          {stack.map((item, i) => (
+            <Reveal
               key={item.name}
+              delay={i * 0.06}
               className="flex flex-col gap-1 border-b border-line py-4 first:border-t sm:flex-row sm:gap-6"
             >
               <dt className="font-mono text-xs tracking-widest text-fg uppercase sm:w-48 sm:shrink-0">
                 {item.name}
               </dt>
               <dd className="text-sm text-fg-secondary">{item.note}</dd>
-            </div>
+            </Reveal>
           ))}
         </dl>
 
         <ul className="flex flex-col gap-5">
-          {decisions.map((d) => (
-            <li key={d} className="flex gap-4 text-fg-secondary">
-              <span aria-hidden className="mt-3 h-px w-6 shrink-0 bg-accent" />
-              {d}
+          {decisions.map((d, i) => (
+            <li key={d}>
+              <Reveal delay={i * 0.08} className="flex gap-4 text-fg-secondary">
+                <span aria-hidden className="mt-3 h-px w-6 shrink-0 bg-accent" />
+                {d}
+              </Reveal>
             </li>
           ))}
         </ul>

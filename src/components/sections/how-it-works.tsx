@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 
 const steps = [
@@ -24,12 +25,14 @@ export function HowItWorks() {
     <Section id="how-it-works" label="How it works" title="From a spoken question to a saved lead.">
       <ol className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
-          <li key={step.title} className="flex flex-col gap-4 bg-bg p-8">
-            <span className="font-mono text-xs tracking-widest text-accent">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <h3 className="text-2xl text-fg">{step.title}</h3>
-            <p className="text-sm text-fg-secondary">{step.body}</p>
+          <li key={step.title} className="bg-bg">
+            <Reveal delay={i * 0.1} className="flex h-full flex-col gap-4 p-8">
+              <span className="font-mono text-xs tracking-widest text-accent">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="text-2xl text-fg">{step.title}</h3>
+              <p className="text-sm text-fg-secondary">{step.body}</p>
+            </Reveal>
           </li>
         ))}
       </ol>

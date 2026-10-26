@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 import { CallButton } from "@/components/widget/call-button";
 
@@ -12,15 +13,15 @@ export function LiveAgent() {
   return (
     <Section id="demo" label="Live agent" title="Ask it anything about the work.">
       <div className="grid gap-10 md:grid-cols-2 md:gap-16">
-        <div className="flex flex-col items-start gap-5 border border-line bg-surface p-8">
+        <Reveal className="flex flex-col items-start gap-5 border border-line bg-surface p-8">
           <CallButton />
           <p className="text-fg-secondary">
             The demo is my own sales assistant. It answers questions about my services and
             background, then asks for your name and how to reach you so I can follow up.
           </p>
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal delay={0.1}>
           <h3 className="text-2xl text-fg">Things to try</h3>
           <ul className="mt-5 flex flex-col">
             {sampleQuestions.map((q) => (
@@ -33,7 +34,7 @@ export function LiveAgent() {
             The live demo covers questions and lead capture. Order tracking, product search and
             store integrations are what I build for clients.
           </p>
-        </div>
+        </Reveal>
       </div>
     </Section>
   );
