@@ -11,6 +11,8 @@ type UseVapiOptions = {
 };
 
 const NOT_CONFIGURED = "The voice demo is not configured yet.";
+const MIC_BLOCKED =
+  "Microphone access is blocked. Allow it in your browser settings and try again.";
 const START_FAILED =
   "Could not start the call. Check that microphone access is allowed and try again.";
 
@@ -26,6 +28,7 @@ export function useVapi({
   const vapiRef = useRef<Vapi | null>(null);
   const busyRef = useRef(false);
   const mountedRef = useRef(false);
+  const cancelRef = useRef(false);
 
   const reset = useCallback(() => {
     const vapi = vapiRef.current;
@@ -64,6 +67,7 @@ export function useVapi({
     if (busyRef.current) return;
 
     busyRef.current = true;
+    cancelRef.current = false;
     setError(null);
     setStatus("connecting");
 
@@ -71,6 +75,10 @@ export function useVapi({
       // Loaded on demand so the SDK stays out of the initial bundle.
       const { default: VapiClient } = await import("@vapi-ai/web");
       if (!mountedRef.current) return;
+      if (cancelRef.current) {
+        reset();
+        return;
+      }
 
       const vapi = new VapiClient(publicKey);
       vapiRef.current = vapi;
@@ -86,9 +94,10 @@ export function useVapi({
       vapi.on("error", (err) => {
         // After the call is live, some errors are non-critical (audio
         // processing, recording). call-end fires if the call really drops.
-        console.error("Vapi error:", err);
+        const micBlocked = String(err?.type).startsWith("microphone-preflight");
+        if (!micBlocked) console.error("Vapi error:", err);
         if (!connected) {
-          setError(START_FAILED);
+          setError(micBlocked ? MIC_BLOCKED : START_FAILED);
           reset();
         }
       });
@@ -103,9 +112,13 @@ export function useVapi({
   }, [publicKey, assistantId, reset]);
 
   const stop = useCallback(() => {
+    // Stopped before the SDK finished loading: start() bails out on its own.
+    cancelRef.current = true;
     // call-end resets the state once the connection is closed.
     void vapiRef.current?.stop();
   }, []);
+
+  const dismissError = useCallback(() => setError(null), []);
 
   const toggleMute = useCallback(() => {
     const vapi = vapiRef.current;
@@ -124,5 +137,6 @@ export function useVapi({
     start,
     stop,
     toggleMute,
+    dismissError,
   };
 }

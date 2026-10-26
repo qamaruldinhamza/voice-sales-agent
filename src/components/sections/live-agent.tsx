@@ -1,5 +1,5 @@
-import { Mic } from "lucide-react";
 import { Section } from "@/components/section";
+import { CallButton } from "@/components/widget/call-button";
 
 const sampleQuestions = [
   "What services do you offer?",
@@ -13,17 +13,7 @@ export function LiveAgent() {
     <Section id="demo" label="Live agent" title="Ask it anything about the work.">
       <div className="grid gap-10 md:grid-cols-2 md:gap-16">
         <div className="flex flex-col items-start gap-5 border border-line bg-surface p-8">
-          <button
-            type="button"
-            disabled
-            aria-label="Start voice call (available soon)"
-            className="flex size-16 items-center justify-center rounded-full border border-line-light text-fg-muted"
-          >
-            <Mic size={24} aria-hidden />
-          </button>
-          <p className="font-mono text-xs tracking-widest text-fg-muted uppercase">
-            Voice demo opens here soon
-          </p>
+          <CallButton />
           <p className="text-fg-secondary">
             The demo is my own sales assistant. It answers questions about my services and
             background, then asks for your name and how to reach you so I can follow up.
