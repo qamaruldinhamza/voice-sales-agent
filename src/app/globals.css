@@ -1,26 +1,136 @@
 @import "tailwindcss";
 
+/*
+ * Raw tokens live on :root and are overridden per preset with a data-theme
+ * attribute. The @theme block maps them to Tailwind utilities (bg-bg,
+ * text-fg, border-line, text-accent, ...).
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #080808;
+  --surface: #101010;
+  --surface-2: #161616;
+  --accent: #c8a96e;
+  --accent-dim: #a08854;
+  --fg: #f0ede8;
+  --fg-secondary: #b8b4ae;
+  --fg-muted: #706c66;
+  --line: #222222;
+  --line-light: #2e2e2e;
+}
+
+/* stackmesh.com */
+[data-theme="cyan"] {
+  --bg: #04050a;
+  --surface: #07090f;
+  --surface-2: #0a0d16;
+  --accent: #5bb8f5;
+  --accent-dim: #3aa0e8;
+  --fg: #eef4ff;
+  --fg-secondary: #c8d4e8;
+  --fg-muted: #5a6880;
+  --line: rgb(91 184 245 / 0.18);
+  --line-light: rgb(91 184 245 / 0.3);
+}
+
+/* portal.qamaruldin.com */
+[data-theme="indigo"] {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-2: #1c1c1c;
+  --accent: #6366f1;
+  --accent-dim: #4f46e5;
+  --fg: #e5e5e5;
+  --fg-secondary: #a3a3a3;
+  --fg-muted: #737373;
+  --line: #222222;
+  --line-light: #2e2e2e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-fg: var(--fg);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-line-light: var(--line-light);
+
+  --font-heading: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --text-display: clamp(4rem, 12vw, 10rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.01em;
+  --text-headline: clamp(2.5rem, 5vw, 4.5rem);
+  --text-headline--line-height: 1;
+  --text-subheadline: clamp(1.5rem, 3vw, 2.25rem);
+  --text-subheadline--line-height: 1.15;
+
+  --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--fg);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-light);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Subtle film grain over the whole page. Add the class to <body>. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
