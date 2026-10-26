@@ -5,6 +5,7 @@ import { Mic, MicOff, PhoneOff } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-m";
 import { easeOutExpo } from "@/components/motion/ease";
+import { ContactLinks } from "@/components/widget/contact-links";
 import { site } from "@/lib/site";
 import { useVoice } from "@/components/widget/voice-provider";
 
@@ -15,7 +16,7 @@ const statusText = {
 } as const;
 
 export function CallOverlay() {
-  const { status, isMuted, isSpeaking, stop, toggleMute } = useVoice();
+  const { status, isMuted, isSpeaking, contactChannel, stop, toggleMute } = useVoice();
   const endRef = useRef<HTMLButtonElement>(null);
   const active = status !== "idle";
 
@@ -49,7 +50,7 @@ export function CallOverlay() {
           role="dialog"
           aria-modal="true"
           aria-label="Voice call"
-          className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8 bg-bg/95 px-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8 overflow-y-auto bg-bg/95 px-6 py-8 backdrop-blur-sm"
         >
           <div className="relative flex size-40 items-center justify-center">
             {pulsing &&
@@ -103,6 +104,24 @@ export function CallOverlay() {
               <PhoneOff size={20} aria-hidden />
             </button>
           </div>
+
+          <AnimatePresence>
+            {contactChannel && (
+              <m.div
+                key="contact"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.3, ease: easeOutExpo }}
+                className="flex flex-col items-center gap-4"
+              >
+                <p className="font-mono text-xs tracking-widest text-fg-muted uppercase">
+                  Reach Qamar
+                </p>
+                <ContactLinks channel={contactChannel} />
+              </m.div>
+            )}
+          </AnimatePresence>
         </m.div>
       )}
     </AnimatePresence>
