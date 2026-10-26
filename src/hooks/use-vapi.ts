@@ -107,6 +107,8 @@ export function useVapi({
     void vapiRef.current?.stop();
   }, []);
 
+  const dismissError = useCallback(() => setError(null), []);
+
   const toggleMute = useCallback(() => {
     const vapi = vapiRef.current;
     if (!vapi) return;
@@ -124,5 +126,6 @@ export function useVapi({
     start,
     stop,
     toggleMute,
+    dismissError,
   };
 }
