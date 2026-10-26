@@ -1,4 +1,5 @@
 import { Cta } from "@/components/sections/cta";
+import { Faq } from "@/components/sections/faq";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { LiveAgent } from "@/components/sections/live-agent";
@@ -12,6 +13,7 @@ export default function Home() {
       <LiveAgent />
       <HowItWorks />
       <Stack />
+      <Faq />
       <Source />
       <Cta />
     </>
