@@ -11,6 +11,8 @@ type UseVapiOptions = {
 };
 
 const NOT_CONFIGURED = "The voice demo is not configured yet.";
+const MIC_BLOCKED =
+  "Microphone access is blocked. Allow it in your browser settings and try again.";
 const START_FAILED =
   "Could not start the call. Check that microphone access is allowed and try again.";
 
@@ -92,9 +94,10 @@ export function useVapi({
       vapi.on("error", (err) => {
         // After the call is live, some errors are non-critical (audio
         // processing, recording). call-end fires if the call really drops.
-        console.error("Vapi error:", err);
+        const micBlocked = String(err?.type).startsWith("microphone-preflight");
+        if (!micBlocked) console.error("Vapi error:", err);
         if (!connected) {
-          setError(START_FAILED);
+          setError(micBlocked ? MIC_BLOCKED : START_FAILED);
           reset();
         }
       });
