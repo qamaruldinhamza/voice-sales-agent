@@ -1,6 +1,7 @@
 export const site = {
   name: "Voice Sales Agent",
   author: "Qamar Ul Din Hamza",
+  assistantName: "Qamar's assistant",
   copyrightYear: 2026,
   repoUrl: "https://github.com/qamaruldinhamza/voice-sales-agent",
   authorUrl: "https://qamaruldin.com",

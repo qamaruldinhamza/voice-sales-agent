@@ -74,6 +74,18 @@
 
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --animate-ring-out: ring-out 2.4s var(--ease-out-expo) infinite;
+  @keyframes ring-out {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
 }
 
 html {

@@ -26,6 +26,7 @@ export function useVapi({
   const vapiRef = useRef<Vapi | null>(null);
   const busyRef = useRef(false);
   const mountedRef = useRef(false);
+  const cancelRef = useRef(false);
 
   const reset = useCallback(() => {
     const vapi = vapiRef.current;
@@ -64,6 +65,7 @@ export function useVapi({
     if (busyRef.current) return;
 
     busyRef.current = true;
+    cancelRef.current = false;
     setError(null);
     setStatus("connecting");
 
@@ -71,6 +73,10 @@ export function useVapi({
       // Loaded on demand so the SDK stays out of the initial bundle.
       const { default: VapiClient } = await import("@vapi-ai/web");
       if (!mountedRef.current) return;
+      if (cancelRef.current) {
+        reset();
+        return;
+      }
 
       const vapi = new VapiClient(publicKey);
       vapiRef.current = vapi;
@@ -103,6 +109,8 @@ export function useVapi({
   }, [publicKey, assistantId, reset]);
 
   const stop = useCallback(() => {
+    // Stopped before the SDK finished loading: start() bails out on its own.
+    cancelRef.current = true;
     // call-end resets the state once the connection is closed.
     void vapiRef.current?.stop();
   }, []);
