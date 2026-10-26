@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Mic, X } from "lucide-react";
+import { LiveDot } from "@/components/widget/live-dot";
 import { useVoice } from "@/components/widget/voice-provider";
 
 const NUDGE_DELAY_MS = 8000;
@@ -91,12 +92,13 @@ export function FloatingButton() {
         type="button"
         onClick={handleStart}
         aria-label="Talk to the assistant"
-        className="flex size-14 animate-beacon items-center justify-center gap-2 rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:animate-none sm:w-auto sm:px-6"
+        className="relative flex size-14 animate-beacon items-center justify-center gap-2 rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:animate-none sm:w-auto sm:px-6"
       >
         <Mic size={20} aria-hidden />
         <span className="hidden font-mono text-xs tracking-widest uppercase sm:inline">
           Talk to it
         </span>
+        <LiveDot className="-top-1 -right-1" />
       </button>
     </div>
   );

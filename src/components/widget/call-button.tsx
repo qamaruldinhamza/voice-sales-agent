@@ -1,6 +1,7 @@
 "use client";
 
 import { Mic } from "lucide-react";
+import { LiveDot } from "@/components/widget/live-dot";
 import { useVoice } from "@/components/widget/voice-provider";
 
 export function CallButton() {
@@ -14,9 +15,10 @@ export function CallButton() {
         onClick={start}
         disabled={busy}
         aria-label="Start voice call"
-        className="flex size-16 items-center justify-center rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent enabled:animate-beacon enabled:motion-reduce:animate-none disabled:cursor-not-allowed disabled:opacity-40"
+        className="relative flex size-16 items-center justify-center rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent enabled:animate-beacon enabled:motion-reduce:animate-none disabled:cursor-not-allowed disabled:opacity-40"
       >
         <Mic size={24} aria-hidden />
+        {!busy && <LiveDot className="-top-0.5 -right-0.5" />}
       </button>
       <p className="font-mono text-xs tracking-widest text-fg-muted uppercase">
         {busy ? "Call in progress" : "Click to talk"}
