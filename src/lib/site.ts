@@ -8,6 +8,9 @@ export const site = {
   contactUrl: "https://qamaruldin.com/contact",
   agencyUrl: "https://stackmesh.com",
   email: "hire@qamaruldin.com",
+  // Profile links come from env vars so they are not hard-coded in the public repo.
+  upworkUrl: process.env.NEXT_PUBLIC_UPWORK_URL,
+  linkedinUrl: process.env.NEXT_PUBLIC_LINKEDIN_URL,
 };
 
 export const navLinks = [
