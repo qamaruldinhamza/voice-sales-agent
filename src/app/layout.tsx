@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Mono, Inter } from "next/font/google";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
+import { VoiceProvider } from "@/components/widget/voice-provider";
+import { VoiceWidget } from "@/components/widget/voice-widget";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -40,11 +42,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Nav />
-        <main id="main" className="flex flex-1 flex-col pt-16">
-          {children}
-        </main>
-        <Footer />
+        <VoiceProvider>
+          <Nav />
+          <main id="main" className="flex flex-1 flex-col pt-16">
+            {children}
+          </main>
+          <Footer />
+          <VoiceWidget />
+        </VoiceProvider>
       </body>
     </html>
   );
