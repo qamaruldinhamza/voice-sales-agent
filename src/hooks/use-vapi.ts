@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type Vapi from "@vapi-ai/web";
+import { parseContactChannel, type ContactChannel } from "@/lib/contact";
 
 export type CallStatus = "idle" | "connecting" | "connected";
 
@@ -9,6 +10,9 @@ type UseVapiOptions = {
   publicKey?: string;
   assistantId?: string;
 };
+
+// Backstop for the max duration set in the Vapi dashboard, in case the server never ends the call.
+const MAX_CALL_MS = 5 * 60 * 1000;
 
 const NOT_CONFIGURED = "The voice demo is not configured yet.";
 const MIC_BLOCKED =
@@ -23,6 +27,26 @@ function isCallEnded(err: unknown) {
   return type === "ejected";
 }
 
+// The assistant's client-side tool call. It names a channel only; the URLs live in lib/contact.ts.
+function contactChannelFromMessage(message: unknown): ContactChannel | "all" | null {
+  const msg = message as {
+    type?: string;
+    toolCallList?: { function?: { name?: string; arguments?: unknown } }[];
+  } | null;
+  if (msg?.type !== "tool-calls") return null;
+  const call = msg.toolCallList?.find((c) => c.function?.name === "show_contact_links");
+  if (!call) return null;
+  let args = call.function?.arguments;
+  if (typeof args === "string") {
+    try {
+      args = JSON.parse(args);
+    } catch {
+      args = null;
+    }
+  }
+  return parseContactChannel((args as { channel?: unknown } | null)?.channel);
+}
+
 export function useVapi({
   publicKey = process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY,
   assistantId = process.env.NEXT_PUBLIC_VAPI_ASSISTANT_ID,
@@ -31,6 +55,8 @@ export function useVapi({
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [contactChannel, setContactChannel] = useState<ContactChannel | "all" | null>(null);
+  const [ended, setEnded] = useState(false);
 
   const vapiRef = useRef<Vapi | null>(null);
   const busyRef = useRef(false);
@@ -49,6 +75,7 @@ export function useVapi({
     setStatus("idle");
     setIsMuted(false);
     setIsSpeaking(false);
+    setContactChannel(null);
   }, []);
 
   useEffect(() => {
@@ -76,6 +103,8 @@ export function useVapi({
     busyRef.current = true;
     cancelRef.current = false;
     setError(null);
+    setEnded(false);
+    setContactChannel(null);
     setStatus("connecting");
 
     try {
@@ -90,17 +119,26 @@ export function useVapi({
       const vapi = new VapiClient(publicKey);
       vapiRef.current = vapi;
       let connected = false;
+      // A call that was live and then ended, for any reason, gets the thank-you dialog.
+      const finish = () => {
+        if (connected && mountedRef.current) setEnded(true);
+        reset();
+      };
 
       vapi.on("call-start", () => {
         connected = true;
         setStatus("connected");
       });
-      vapi.on("call-end", reset);
+      vapi.on("call-end", finish);
+      vapi.on("message", (message) => {
+        const channel = contactChannelFromMessage(message);
+        if (channel) setContactChannel(channel);
+      });
       vapi.on("speech-start", () => setIsSpeaking(true));
       vapi.on("speech-end", () => setIsSpeaking(false));
       vapi.on("error", (err) => {
         if (isCallEnded(err)) {
-          reset();
+          finish();
           return;
         }
         // After the call is live, some errors are non-critical (audio
@@ -130,6 +168,13 @@ export function useVapi({
   }, []);
 
   const dismissError = useCallback(() => setError(null), []);
+  const dismissEnded = useCallback(() => setEnded(false), []);
+
+  useEffect(() => {
+    if (status !== "connected") return;
+    const timer = setTimeout(stop, MAX_CALL_MS);
+    return () => clearTimeout(timer);
+  }, [status, stop]);
 
   const toggleMute = useCallback(() => {
     const vapi = vapiRef.current;
@@ -144,10 +189,13 @@ export function useVapi({
     isMuted,
     isSpeaking,
     error,
+    contactChannel,
+    ended,
     isConfigured: Boolean(publicKey && assistantId),
     start,
     stop,
     toggleMute,
     dismissError,
+    dismissEnded,
   };
 }
