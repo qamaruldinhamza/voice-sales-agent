@@ -36,7 +36,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${cormorant.variable} ${inter.variable} ${dmMono.variable} h-full antialiased`}
     >
-      <body id="top" className="grain flex min-h-full flex-col">
+      {/* Browser extensions add attributes to <body> before React hydrates. */}
+      <body id="top" suppressHydrationWarning className="grain flex min-h-full flex-col">
         <a
           href="#main"
           className="sr-only z-50 bg-accent px-4 py-2 font-mono text-xs text-bg focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
