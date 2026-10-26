@@ -14,7 +14,7 @@ export function CallButton() {
         onClick={start}
         disabled={busy}
         aria-label="Start voice call"
-        className="flex size-16 items-center justify-center rounded-full bg-accent text-bg transition-colors hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40"
+        className="flex size-16 items-center justify-center rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent enabled:animate-beacon enabled:motion-reduce:animate-none disabled:cursor-not-allowed disabled:opacity-40"
       >
         <Mic size={24} aria-hidden />
       </button>

@@ -75,6 +75,21 @@
   --ease-out-expo: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
+  --animate-beacon: beacon 2.4s ease-out infinite;
+  @keyframes beacon {
+    0% {
+      box-shadow:
+        0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent),
+        0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow:
+        0 0 0 20px transparent,
+        0 4px 24px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+  }
+
   --animate-ring-out: ring-out 2.4s var(--ease-out-expo) infinite;
   @keyframes ring-out {
     0% {
@@ -91,6 +106,11 @@
 html {
   background: var(--bg);
   scroll-behavior: smooth;
+}
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 body {
