@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Mono, Inter } from "next/font/google";
+import { Footer } from "@/components/footer";
+import { Nav } from "@/components/nav";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -31,7 +33,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${cormorant.variable} ${inter.variable} ${dmMono.variable} h-full antialiased`}
     >
-      <body className="grain flex min-h-full flex-col">{children}</body>
+      <body id="top" className="grain flex min-h-full flex-col">
+        <a
+          href="#main"
+          className="sr-only z-50 bg-accent px-4 py-2 font-mono text-xs text-bg focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+        >
+          Skip to content
+        </a>
+        <Nav />
+        <main id="main" className="flex flex-1 flex-col pt-16">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }
