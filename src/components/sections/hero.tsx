@@ -26,7 +26,7 @@ export function Hero() {
           href="#demo"
           className="inline-flex min-h-11 items-center gap-2 bg-accent px-6 py-3 font-mono text-xs tracking-widest text-bg uppercase transition-colors hover:bg-accent-dim"
         >
-          Talk to it
+          Ask AI
           <ArrowRight size={14} aria-hidden />
         </a>
         <a
