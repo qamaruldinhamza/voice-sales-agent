@@ -114,12 +114,12 @@ export function FloatingButton() {
           <button
             type="button"
             onClick={handleStart}
-            aria-label="Talk to the assistant"
+            aria-label="Ask AI"
             className="relative flex size-14 animate-beacon items-center justify-center gap-2 rounded-full bg-accent text-bg transition-colors hover:animate-none hover:bg-accent-dim focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:animate-none sm:w-auto sm:px-6"
           >
             <Mic size={20} aria-hidden />
             <span className="hidden font-mono text-xs tracking-widest uppercase sm:inline">
-              Talk to it
+              Ask AI
             </span>
             <LiveDot className="-top-1 -right-1" />
           </button>
