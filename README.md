@@ -1,27 +1,37 @@
 # Voice Sales Agent
 
-A voice AI agent for websites and online stores. Visitors click a mic button and talk. The agent answers their questions, finds out what they need, and sends the details to the business. No forms, no phone tree.
+**A voice AI agent for your website or online store. Visitors click a mic button and talk. It answers their questions, finds out what they need, and sends you the details. No forms, no phone tree.**
 
-**Live demo: [agent.qamaruldin.com](https://agent.qamaruldin.com)**
+[**Try the live demo**](https://agent.qamaruldin.com) · [**Hire me on Upwork**](https://www.upwork.com/freelancers/qamaruldinhamzas) · [**LinkedIn**](https://www.linkedin.com/in/qamaruldinhamza/) · [**hire@qamaruldin.com**](mailto:hire@qamaruldin.com)
 
 Built by [Qamar Ul Din Hamza](https://qamaruldin.com). Available as a custom build for your site or store.
 
 > **Status:** in development. The demo goes live at the link above with the first release.
 
-## What the demo does
+## What you get
 
-The demo is my own sales assistant. It:
+| For your business                 | How the agent does it                                                               |
+| --------------------------------- | ----------------------------------------------------------------------------------- |
+| Fewer lost visitors               | Answers questions the moment they come up, on any page, at any hour                 |
+| Leads you can act on              | Asks for name, need and contact details in conversation, then saves them            |
+| Less time on repeat questions     | Answers from your own policies, catalogue and pricing, and hands off when it should |
+| The whole conversation, not a tag | You get a summary and a full transcript of each call                                |
+| Your brand, not mine              | Voice, wording, colours and the mic button are tuned to your site                   |
+
+## See it working
+
+The demo is my own sales assistant. Talk to it at [agent.qamaruldin.com](https://agent.qamaruldin.com). It:
 
 - answers questions about my services, stack and background
-- asks the visitor for their name, what they need and how to reach them
-- saves the lead to Airtable
-- emails me a summary of the conversation
+- asks for your name, what you need and how to reach you
+- shows my Upwork, LinkedIn and email links during and after the call
+- saves the lead and the call transcript to my Airtable
 
-The same widget runs on my own sites: [qamaruldin.com](https://qamaruldin.com), [stackmesh.com](https://stackmesh.com) and [portal.qamaruldin.com](https://portal.qamaruldin.com), each with its own look and its own assistant.
+The same widget is meant for my own sites: [qamaruldin.com](https://qamaruldin.com), [stackmesh.com](https://stackmesh.com) and [portal.qamaruldin.com](https://portal.qamaruldin.com), each with its own look and its own assistant.
 
-## What it can be used for
+## What I build for clients
 
-The demo covers questions and lead capture. The rest of this section is what I build for clients, connected to their own systems.
+The demo covers questions and lead capture. This section is what I build for clients, connected to their own systems.
 
 ### Online stores
 
@@ -67,34 +77,42 @@ Agencies and consultancies, clinics and dental practices, real estate, home serv
 - Email and messaging: Resend, SMTP, Slack
 - Your own APIs and databases
 
-## How it works
+## How a project runs
+
+1. **Scope.** We agree what the agent should answer, what it should capture and where the details should go.
+2. **Build.** I write the assistant, connect your systems and style the widget to your brand.
+3. **Test.** We run real calls against your questions until the answers are right.
+4. **Launch.** It goes live on your site, with spend limits and a domain allow-list set on your own Vapi account.
+
+## Under the hood
 
 ```mermaid
 flowchart LR
   V[Visitor's browser] -->|voice| W[Widget]
   W --> A[Vapi: speech and LLM]
-  A -->|tool call| H[Webhook API]
+  A -->|end-of-call report| H[Webhook API]
   H --> D[(Airtable)]
   H --> E[Email summary]
 ```
 
-1. The widget is one script tag, so it also works on non-React sites like Astro and WordPress.
-2. Speech recognition, the language model and the voice run on Vapi.
-3. When the agent has what it needs, it calls a tool. The webhook validates the request, stores the lead and sends the email.
-4. A shared secret and a domain allow-list protect the endpoint, and call length is capped.
+- Speech recognition, the language model and the voice run on Vapi.
+- When a call ends, Vapi sends a report to a webhook. The webhook checks a shared secret, validates the payload, and saves the lead and transcript.
+- The call is capped in length, and the browser key only works on allowed domains.
 
-## Stack
+Built with Next.js 16, React 19, TypeScript, Tailwind CSS 4, the Vapi Web SDK, Zod, Airtable and Resend, deployed on Vercel.
 
-Next.js 16, React 19, TypeScript, Tailwind CSS 4, the Vapi Web SDK, Airtable, Resend, deployed on Vercel.
+## Work with me
+
+Want this for your business? Tell me what your site does and what you want the agent to handle.
+
+- Upwork: [upwork.com/freelancers/qamaruldinhamzas](https://www.upwork.com/freelancers/qamaruldinhamzas)
+- LinkedIn: [linkedin.com/in/qamaruldinhamza](https://www.linkedin.com/in/qamaruldinhamza/)
+- Email: [hire@qamaruldin.com](mailto:hire@qamaruldin.com)
+- Web: [qamaruldin.com](https://qamaruldin.com)
+- Agency: [stackmesh.com](https://stackmesh.com)
 
 ## About this repository
 
 This is a portfolio project, published so you can read how it is built. It is not a starter template, and the assistant configuration and deployment setup are not included.
 
-The code is under an all-rights-reserved license, see [LICENSE](LICENSE). If you want a voice agent for your own website or store, get in touch and I will build it for your brand and systems.
-
-## Contact
-
-- Email: [hire@qamaruldin.com](mailto:hire@qamaruldin.com)
-- Web: [qamaruldin.com](https://qamaruldin.com)
-- Agency: [stackmesh.com](https://stackmesh.com)
+The code is under an all-rights-reserved license, see [LICENSE](LICENSE).
