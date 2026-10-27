@@ -1,4 +1,5 @@
 import { createHash, timingSafeEqual } from "node:crypto";
+import { saveCall } from "@/lib/airtable";
 import { parseEvent } from "@/lib/vapi-report";
 
 // Vapi sends the shared secret in this header (a custom credential with the Bearer prefix off).
@@ -34,11 +35,23 @@ export async function POST(request: Request) {
   // Other event types (status updates, transcripts) need no work and no reply body.
   if (event.kind === "ignored") return Response.json({ ok: true });
 
-  // Saving and emailing the lead are added in the next PRs.
+  const { record } = event;
   console.info("call report received", {
-    callId: event.record.callId,
-    endedReason: event.record.endedReason,
-    hasLead: Boolean(event.record.lead.email || event.record.lead.name),
+    callId: record.callId,
+    endedReason: record.endedReason,
+    hasLead: Boolean(record.lead.email || record.lead.name),
   });
+
+  try {
+    await saveCall(record);
+  } catch (error) {
+    console.error("saving call failed", {
+      callId: record.callId,
+      error: error instanceof Error ? error.message : "unknown",
+    });
+    // A non-2xx reply makes Vapi retry, and the upsert on Call ID keeps the retry safe.
+    return Response.json({ error: "could not save call" }, { status: 502 });
+  }
+  // Emailing the lead is added in the next PRs.
   return Response.json({ ok: true });
 }
